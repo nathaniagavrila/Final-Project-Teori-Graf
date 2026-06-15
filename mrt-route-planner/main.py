@@ -3,6 +3,7 @@ import re
 import heapq
 from collections import defaultdict
 from itertools import permutations
+from places import PLACES
 
 df = pd.read_csv("dataset/MRT Stations.csv")
 
@@ -129,17 +130,9 @@ def print_route(start_code, end_code):
     for code in path:
         print(f"{code} - {code_to_station[code]}")
 
-tourist_stations = {
-    "Lavender": "EW11",
-    "Chinatown": "DT19",
-    "Bayfront": "DT16",
-    "Orchard": "NS22",
-    "Botanic Gardens": "DT9"
-}
-
 def get_distance(station_a, station_b):
-    code_a = tourist_stations[station_a]
-    code_b = tourist_stations[station_b]
+    code_a = PLACES[station_a]
+    code_b = PLACES[station_b]
 
     distance, _ = dijkstra(code_a, code_b)
 
@@ -179,8 +172,8 @@ def print_tsp_detail(route):
         start_station = route[i]
         end_station = route[i + 1]
 
-        start_code = tourist_stations[start_station]
-        end_code = tourist_stations[end_station]
+        start_code = PLACES[start_station]
+        end_code = PLACES[end_station]
 
         time, path = dijkstra(start_code, end_code)
         transfers, transfer_stations = count_transfers(path)
@@ -204,8 +197,8 @@ def print_tsp_detail(route):
     print("Total Transfers:", total_transfers)
 
 def get_transfer_and_time(station_a, station_b):
-    code_a = tourist_stations[station_a]
-    code_b = tourist_stations[station_b]
+    code_a = PLACES[station_a]
+    code_b = PLACES[station_b]
 
     time, path = dijkstra(code_a, code_b)
     transfers, _ = count_transfers(path)
@@ -244,10 +237,13 @@ def tsp_least_transfer(start, destinations):
     return best_route, best_transfers, best_time
 
 print("===== MRT TOURIST ROUTE PLANNER =====")
-print("Available sample stations:")
-print("Lavender, Chinatown, Bayfront, Orchard, Botanic Gardens")
+print("Available places:")
 
-start = input("\nInput start station: ")
+for place in PLACES:
+    print("-", place)
+
+
+start = input("\nInput your starting point: ")
 
 n = int(input("Input number of destinations: "))
 
@@ -288,8 +284,8 @@ def get_lines(code):
 
 
 def no_transfer_route(station_a, station_b):
-    codes_a = station_codes[code_to_station[tourist_stations[station_a]]]
-    codes_b = station_codes[code_to_station[tourist_stations[station_b]]]
+    codes_a = station_codes[code_to_station[PLACES[station_a]]]
+    codes_b = station_codes[code_to_station[PLACES[station_b]]]
 
     for code_a in codes_a:
         line_a = get_lines(code_a)
