@@ -63,8 +63,7 @@ mrt-route-planner/
 ├── graph.py              # Graph construction, Dijkstra, TSP functions
 ├── main.py               # Main script: user input, TSP, route output
 ├── places.py             # Dictionary of tourist destinations → MRT codes
-├── visualization.py      # Route visualization using NetworkX & Matplotlib
-└── README.md
+└── visualization.py      # Route visualization using NetworkX & Matplotlib
 ```
 
 ---
