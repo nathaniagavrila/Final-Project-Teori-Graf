@@ -1,0 +1,9 @@
+# python cache
+__pycache__/
+*.pyc
+
+# vscode junk
+.vscode/
+
+# temporary files
+tempCodeRunnerFile.py

@@ -4,8 +4,12 @@ import heapq
 from collections import defaultdict
 from itertools import permutations
 from places import PLACES
+from visualization import visualize
 
 df = pd.read_csv("dataset/MRT Stations.csv")
+
+def route_to_codes(route):
+    return [PLACES[place] for place in route]
 
 def extract_codes(stn_no):
     return str(stn_no).split("/")
@@ -113,7 +117,6 @@ def count_transfers(path):
             transfer_stations.append(current_station)
 
     return transfers, transfer_stations
-
 
 def print_route(start_code, end_code):
     total_time, path = dijkstra(start_code, end_code)
@@ -339,3 +342,28 @@ if available:
 else:
     print("No-transfer route not available for the full itinerary")
     print(f"Reason: {failed_from} → {failed_to} requires MRT line transfer")
+
+# convert route (place -> station code)
+best_route_codes = route_to_codes(best_route)
+least_route_codes = route_to_codes(least_route)
+
+# get FULL MRT PATH 
+best_full_path = []
+least_full_path = []
+
+for i in range(len(best_route_codes) - 1):
+    _, path = dijkstra(best_route_codes[i], best_route_codes[i+1])
+    if i == 0:
+        best_full_path.extend(path)
+    else:
+        best_full_path.extend(path[1:])
+
+for i in range(len(least_route_codes) - 1):
+    _, path = dijkstra(least_route_codes[i], least_route_codes[i+1])
+    if i == 0:
+        least_full_path.extend(path)
+    else:
+        least_full_path.extend(path[1:])
+
+visualize(graph, df, best_full_path, "Fastest Route")
+visualize(graph, df, least_full_path, "Least Transfer Route")
